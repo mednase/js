@@ -1,0 +1,2938 @@
+{
+"swagger": "2.0",
+"info": {
+"title": "Maatloob Api",
+"description": "This maatloob api documentation",
+"version": "v1"
+},
+"paths": {
+"/api/v1/login": {
+"post": {
+"summary": "Login API",
+"parameters": [
+{
+"name": "form",
+"in": "body",
+"description": "Request Body Params",
+"schema": {
+"$ref": "#/definitions/LoginForm"
+}
+}
+],
+"responses": {
+"200": {
+"description": "Credentials are valid return user information with JWT",
+"schema": {
+"properties": {
+"code": {
+"example": 200,
+"type": "integer"
+},
+"msg": {
+"example": "Successfully logged in",
+"type": "string"
+},
+"data": {
+"properties": {
+"token": {
+"example": "",
+"type": "string"
+},
+"user": {
+"$ref": "#/definitions/User"
+}
+},
+"type": "object"
+}
+},
+"type": "object"
+}
+},
+"400": {
+"description": "Error login invalid credentials",
+"schema": {
+"properties": {
+"code": {
+"example": 400,
+"type": "integer"
+},
+"msg": {
+"example": "Invalid email or password",
+"type": "string"
+}
+},
+"type": "object"
+}
+},
+"401": {
+"description": "Error login account account not confirmed",
+"schema": {
+"properties": {
+"code": {
+"example": 401,
+"type": "integer"
+},
+"msg": {
+"example": "Account not confirmed verify your email",
+"type": "string"
+}
+},
+"type": "object"
+}
+},
+"403": {
+"description": "Error login account is banned",
+"schema": {
+"properties": {
+"code": {
+"example": 403,
+"type": "integer"
+},
+"msg": {
+"example": "This account is banned",
+"type": "string"
+}
+},
+"type": "object"
+}
+}
+},
+"tags": [
+"Authentication"
+]
+}
+},
+"/api/v1/register": {
+"post": {
+"summary": "Register API",
+"parameters": [
+{
+"name": "form",
+"in": "body",
+"description": "Request Body Params",
+"schema": {
+"$ref": "#/definitions/RegisterForm"
+}
+}
+],
+"responses": {
+"200": {
+"description": "Account exist but not confirmed , confirm email was sent",
+"schema": {
+"properties": {
+"code": {
+"example": 200,
+"type": "integer"
+},
+"msg": {
+"example": "Verify your email",
+"type": "string"
+}
+},
+"type": "object"
+}
+},
+"201": {
+"description": "Account is created and confirm email was sent",
+"schema": {
+"properties": {
+"code": {
+"example": 201,
+"type": "integer"
+},
+"msg": {
+"example": "Account created",
+"type": "string"
+}
+},
+"type": "object"
+}
+},
+"400": {
+"description": "Error register provided inputs not valid",
+"schema": {
+"properties": {
+"code": {
+"example": 400,
+"type": "integer"
+},
+"msg": {
+"example": "Require email and password",
+"type": "string"
+}
+},
+"type": "object"
+}
+},
+"409": {
+"description": "Error register used email address",
+"schema": {
+"properties": {
+"code": {
+"example": 409,
+"type": "integer"
+},
+"msg": {
+"example": "Used email address",
+"type": "string"
+}
+},
+"type": "object"
+}
+}
+},
+"tags": [
+"Authentication"
+]
+}
+},
+"/api/v1/forget_password": {
+"post": {
+"summary": "Forget password API",
+"parameters": [
+{
+"name": "form",
+"in": "body",
+"description": "Request Body Params",
+"schema": {
+"properties": {
+"email": {
+"description": "Account email to reset password",
+"example": "api_maatloob@gmail.com",
+"type": "string"
+}
+},
+"type": "object"
+}
+}
+],
+"responses": {
+"200": {
+"description": "Reset password email succeeded and email was sent",
+"schema": {
+"properties": {
+"code": {
+"example": 200,
+"type": "integer"
+},
+"msg": {
+"example": "Verify your email",
+"type": "string"
+}
+},
+"type": "object"
+}
+},
+"400": {
+"description": "Error sending reset password email invalid input",
+"schema": {
+"properties": {
+"code": {
+"example": 400,
+"type": "integer"
+},
+"msg": {
+"example": "Invalid email address",
+"type": "string"
+}
+},
+"type": "object"
+}
+}
+},
+"tags": [
+"Authentication"
+]
+}
+},
+"/api/v1/notification/list": {
+"get": {
+"summary": "Notification list API",
+"responses": {
+"200": {
+"description": "Return logged in user notification list",
+"schema": {
+"properties": {
+"code": {
+"example": 200,
+"type": "integer"
+},
+"msg": {
+"example": "Notification list",
+"type": "string"
+},
+"data": {
+"$ref": "#/definitions/Notification"
+}
+},
+"type": "object"
+}
+}
+},
+"tags": [
+"Notification"
+],
+"security": [
+{
+"Bearer": []
+}
+]
+}
+},
+"/api/v1/notification/update": {
+"patch": {
+"summary": "Update Notification API",
+"parameters": [
+{
+"name": "form",
+"in": "body",
+"description": "Request Body Params",
+"schema": {
+"required": [
+"notification"
+],
+"properties": {
+"notification": {
+"description": "The notification id",
+"example": "1458F846Z",
+"type": "string"
+},
+"shown_on": {
+"description": "The notification is showed",
+"example": 1,
+"type": "int"
+},
+"read_on": {
+"description": "The notification is readed",
+"example": 1,
+"type": "int"
+}
+},
+"type": "object"
+}
+}
+],
+"responses": {
+"200": {
+"description": "Update notification set is read and is shown",
+"schema": {
+"properties": {
+"code": {
+"example": 200,
+"type": "integer"
+},
+"msg": {
+"example": "Notification list",
+"type": "string"
+}
+},
+"type": "object"
+}
+},
+"401": {
+"description": "Notification don't belong to logged in user",
+"schema": {
+"properties": {
+"code": {
+"example": 401,
+"type": "integer"
+},
+"msg": {
+"example": "Cant update this notification",
+"type": "string"
+}
+},
+"type": "object"
+}
+},
+"404": {
+"description": "Notification not found",
+"schema": {
+"properties": {
+"code": {
+"example": 404,
+"type": "integer"
+},
+"msg": {
+"example": "Notification not found",
+"type": "string"
+}
+},
+"type": "object"
+}
+}
+},
+"tags": [
+"Notification"
+],
+"security": [
+{
+"Bearer": []
+}
+]
+}
+},
+"/api/v1/notification/delete": {
+"delete": {
+"parameters": [
+{
+"name": "form",
+"in": "body",
+"description": "Request Body Params",
+"schema": {
+"required": [
+"notification"
+],
+"properties": {
+"notification": {
+"description": "The notification id",
+"example": "1458F846Z",
+"type": "string"
+}
+},
+"type": "object"
+}
+}
+],
+"responses": {
+"200": {
+"description": "Delete logged in user notification",
+"schema": {
+"properties": {
+"code": {
+"example": 200,
+"type": "integer"
+},
+"msg": {
+"example": "Notification has been deleted",
+"type": "string"
+}
+},
+"type": "object"
+}
+},
+"401": {
+"description": "Notification don't belong to logged in user",
+"schema": {
+"properties": {
+"code": {
+"example": 401,
+"type": "integer"
+},
+"msg": {
+"example": "Cant delete this notification",
+"type": "string"
+}
+},
+"type": "object"
+}
+},
+"404": {
+"description": "Notification not found",
+"schema": {
+"properties": {
+"code": {
+"example": 404,
+"type": "integer"
+},
+"msg": {
+"example": "Notification not found",
+"type": "string"
+}
+},
+"type": "object"
+}
+}
+},
+"tags": [
+"Notification"
+],
+"security": [
+{
+"Bearer": []
+}
+]
+}
+},
+"/api/v1/notification/settings": {
+"get": {
+"summary": "Set user notification config API",
+"responses": {
+"200": {
+"description": "Return user notification settings",
+"schema": {
+"properties": {
+"code": {
+"example": 200,
+"type": "integer"
+},
+"msg": {
+"example": "Notification settings updated",
+"type": "string"
+},
+"data": {
+"items": {
+"$ref": "#/definitions/NotificationConfig"
+},
+"type": "array"
+}
+},
+"type": "object"
+}
+}
+},
+"tags": [
+"Notification"
+],
+"security": [
+{
+"Bearer": []
+}
+]
+},
+"put": {
+"summary": "Set user notification config API",
+"parameters": [
+{
+"name": "form",
+"in": "body",
+"description": "Request Body Params",
+"schema": {
+"$ref": "#/definitions/NotificationSettingForm"
+}
+}
+],
+"responses": {
+"200": {
+"description": "Update user notification settings",
+"schema": {
+"properties": {
+"code": {
+"example": 200,
+"type": "integer"
+},
+"msg": {
+"example": "Notification settings updated",
+"type": "string"
+},
+"data": {
+"$ref": "#/definitions/NotificationConfig"
+}
+},
+"type": "object"
+}
+},
+"400": {
+"description": "Error updating notification settings",
+"schema": {
+"properties": {
+"code": {
+"example": 200,
+"type": "integer"
+},
+"msg": {
+"example": "Invalid reuest",
+"type": "string"
+}
+},
+"type": "object"
+}
+}
+},
+"tags": [
+"Notification"
+],
+"security": [
+{
+"Bearer": []
+}
+]
+}
+},
+"/api/v1/user/profile/update": {
+"put": {
+"summary": "Update user profile API",
+"consumes": [
+"multipart/form-data"
+],
+"parameters": [
+{
+"name": "form",
+"in": "body",
+"description": "Request Body Params",
+"schema": {
+"$ref": "#/definitions/ProfileForm"
+}
+}
+],
+"responses": {
+"200": {
+"description": "Update user profile",
+"schema": {
+"properties": {
+"code": {
+"example": 200,
+"type": "integer"
+},
+"msg": {
+"example": "User profile updated",
+"type": "string"
+},
+"data": {
+"$ref": "#/definitions/User2"
+}
+},
+"type": "object"
+}
+},
+"400": {
+"description": "Invalid request",
+"schema": {
+"properties": {
+"code": {
+"example": 400,
+"type": "integer"
+},
+"msg": {
+"example": "User not found",
+"type": "string"
+}
+},
+"type": "object"
+}
+}
+},
+"tags": [
+"User info"
+]
+}
+},
+"/api/v1/user/dashboard": {
+"get": {
+"summary": "Get user dashboard data API",
+"responses": {
+"200": {
+"description": "Return user dashboard data",
+"schema": {
+"properties": {
+"code": {
+"example": 200,
+"type": "integer"
+},
+"msg": {
+"example": "Dashboard data",
+"type": "string"
+},
+"data": {
+"properties": {
+"tasker": {
+"properties": {
+"bidOn": {
+"type": "integer"
+},
+"assigned": {
+"type": "integer"
+},
+"overdue": {
+"type": "integer"
+},
+"awaitingPayment": {
+"type": "integer"
+},
+"completed": {
+"type": "integer"
+},
+"total": {
+"type": "integer"
+},
+"totalReviews": {
+"type": "integer"
+},
+"totalReviewsNote": {
+"type": "integer"
+}
+},
+"type": "object"
+},
+"poster": {
+"properties": {
+"openForOffer": {
+"type": "integer"
+},
+"assigned": {
+"type": "integer"
+},
+"overdue": {
+"type": "integer"
+},
+"awaitingPayment": {
+"type": "integer"
+},
+"completed": {
+"type": "integer"
+},
+"total": {
+"type": "integer"
+},
+"totalReviews": {
+"type": "integer"
+},
+"totalReviewsNote": {
+"type": "integer"
+}
+},
+"type": "object"
+},
+"wallet": {
+"items": {
+"$ref": "#/definitions/UserWallet"
+}
+}
+},
+"type": "object"
+}
+},
+"type": "object"
+}
+}
+},
+"tags": [
+"User info"
+],
+"security": [
+{
+"Bearer": []
+}
+]
+}
+},
+"/api/v1/user/profile": {
+"get": {
+"summary": "Get user profile API",
+"parameters": [
+{
+"name": "form",
+"in": "body",
+"description": "Request Body Params",
+"schema": {
+"properties": {
+"user": {
+"description": "user id",
+"example": "45F8Z92Z0",
+"type": "integer"
+},
+"user_type": {
+"example": "user type can be poster or tasker",
+"type": "string"
+}
+},
+"type": "object"
+}
+}
+],
+"responses": {
+"200": {
+"description": "Return user profile data",
+"schema": {
+"properties": {
+"code": {
+"example": 200,
+"type": "integer"
+},
+"msg": {
+"example": "User profile data",
+"type": "string"
+},
+"data": {
+"$ref": "#/definitions/User2"
+}
+},
+"type": "object"
+}
+},
+"404": {
+"description": "User not found",
+"schema": {
+"properties": {
+"code": {
+"example": 404,
+"type": "integer"
+},
+"msg": {
+"example": "User not found",
+"type": "string"
+}
+},
+"type": "object"
+}
+}
+},
+"tags": [
+"User info"
+]
+}
+},
+"/api/v1/category/list": {
+"get": {
+"summary": "Task Category list API",
+"responses": {
+"200": {
+"description": "Return list of tasks categories",
+"schema": {
+"properties": {
+"code": {
+"example": 200,
+"type": "integer"
+},
+"msg": {
+"example": "Task categories list",
+"type": "string"
+},
+"data": {
+"$ref": "#/definitions/TaskCategory"
+}
+},
+"type": "object"
+}
+}
+},
+"tags": [
+"Task Category"
+]
+}
+},
+"/api/v1/task/list": {
+"post": {
+"summary": "Task list API",
+"parameters": [
+{
+"name": "form",
+"in": "body",
+"description": "Request Body Params",
+"schema": {
+"properties": {
+"filter": {
+"description": "Filter task list",
+"type": "object"
+},
+"distance": {
+"properties": {
+"max": {
+"description": "max distance with km",
+"type": "integer"
+},
+"longitude": {
+"type": "string"
+},
+"latitude": {
+"type": "string"
+}
+},
+"type": "object"
+}
+},
+"type": "object"
+}
+}
+],
+"responses": {
+"200": {
+"description": "Return list of tasks",
+"schema": {
+"properties": {
+"code": {
+"example": 200,
+"type": "integer"
+},
+"msg": {
+"example": "Task list",
+"type": "string"
+},
+"data": {
+"$ref": "#/definitions/Task"
+}
+},
+"type": "object"
+}
+}
+},
+"tags": [
+"Task"
+]
+}
+},
+"/api/v1/task/add": {
+"post": {
+"summary": "Add Task API",
+"parameters": [
+{
+"name": "form",
+"in": "body",
+"description": "Request Body Params",
+"schema": {
+"$ref": "#/definitions/AddTaskForm"
+}
+}
+],
+"responses": {
+"201": {
+"description": "Add task",
+"schema": {
+"properties": {
+"code": {
+"example": 201,
+"type": "integer"
+},
+"msg": {
+"example": "Task Created",
+"type": "string"
+},
+"data": {
+"$ref": "#/definitions/Task2"
+}
+},
+"type": "object"
+}
+}
+},
+"tags": [
+"Task"
+],
+"security": [
+{
+"Bearer": []
+}
+]
+}
+},
+"/api/v1/task/update": {
+"put": {
+"summary": "Update Task API",
+"parameters": [
+{
+"name": "form",
+"in": "body",
+"description": "Request Body Params",
+"schema": {
+"$ref": "#/definitions/UpdateTaskForm"
+}
+}
+],
+"responses": {
+"200": {
+"description": "Update task",
+"schema": {
+"properties": {
+"code": {
+"example": 200,
+"type": "integer"
+},
+"msg": {
+"example": "Task updated",
+"type": "string"
+},
+"data": {
+"properties": {
+"token": {
+"example": "",
+"type": "string"
+},
+"user": {
+"$ref": "#/definitions/Task2"
+}
+},
+"type": "object"
+}
+},
+"type": "object"
+}
+},
+"400": {
+"description": "Invalid request input",
+"schema": {
+"properties": {
+"code": {
+"example": 400,
+"type": "integer"
+},
+"msg": {
+"example": "Title is required",
+"type": "string"
+}
+},
+"type": "object"
+}
+},
+"401": {
+"description": "Task don't belong to logged in user or status not draft",
+"schema": {
+"properties": {
+"code": {
+"example": 401,
+"type": "integer"
+},
+"msg": {
+"example": "Cant update the task",
+"type": "string"
+}
+},
+"type": "object"
+}
+},
+"404": {
+"description": "Task not found",
+"schema": {
+"properties": {
+"code": {
+"example": 404,
+"type": "integer"
+},
+"msg": {
+"example": "Task not found",
+"type": "string"
+}
+},
+"type": "object"
+}
+}
+},
+"tags": [
+"Task"
+],
+"security": [
+{
+"Bearer": []
+}
+]
+}
+},
+"/api/v1/task/delete": {
+"delete": {
+"summary": "Delete Task API",
+"parameters": [
+{
+"name": "form",
+"in": "body",
+"description": "Request Body Params",
+"schema": {
+"properties": {
+"task": {
+"description": "The task id",
+"example": "1458F846Z",
+"type": "string"
+}
+},
+"type": "object"
+}
+}
+],
+"responses": {
+"200": {
+"description": "Task has been deleted",
+"schema": {
+"properties": {
+"code": {
+"example": 200,
+"type": "integer"
+},
+"msg": {
+"example": "The task is successfully deleted",
+"type": "string"
+}
+},
+"type": "object"
+}
+},
+"401": {
+"description": "Task don't belong to logged in user or status not draft",
+"schema": {
+"properties": {
+"code": {
+"example": 401,
+"type": "integer"
+},
+"msg": {
+"example": "Cant delete the task",
+"type": "string"
+}
+},
+"type": "object"
+}
+},
+"404": {
+"description": "Task not found",
+"schema": {
+"properties": {
+"code": {
+"example": 404,
+"type": "integer"
+},
+"msg": {
+"example": "Task not found",
+"type": "string"
+}
+},
+"type": "object"
+}
+}
+},
+"tags": [
+"Task"
+],
+"security": [
+{
+"Bearer": []
+}
+]
+}
+},
+"/api/v1/task/details": {
+"get": {
+"summary": "Task Details API",
+"parameters": [
+{
+"name": "form",
+"in": "body",
+"description": "Request Body Params",
+"schema": {
+"properties": {
+"task": {
+"description": "The task id",
+"example": "1458F846Z",
+"type": "string"
+},
+"show_all": {
+"description": "Show all task question or by default 3",
+"example": 1,
+"type": "int"
+}
+},
+"type": "object"
+}
+}
+],
+"responses": {
+"200": {
+"description": "Return task details",
+"schema": {
+"properties": {
+"code": {
+"example": 200,
+"type": "integer"
+},
+"msg": {
+"example": "Task details",
+"type": "string"
+},
+"data": {
+"$ref": "#/definitions/Task"
+}
+},
+"type": "object"
+}
+},
+"404": {
+"description": "Task not found",
+"schema": {
+"properties": {
+"code": {
+"example": 404,
+"type": "integer"
+},
+"msg": {
+"example": "Task not found",
+"type": "string"
+}
+},
+"type": "object"
+}
+}
+},
+"tags": [
+"Task"
+]
+}
+},
+"/api/v1/task/file/delete": {
+"delete": {
+"summary": "Delete Task API",
+"parameters": [
+{
+"name": "form",
+"in": "body",
+"description": "Request Body Params",
+"schema": {
+"properties": {
+"file": {
+"description": "The file id",
+"example": "1458F846Z",
+"type": "string"
+}
+},
+"type": "object"
+}
+}
+],
+"responses": {
+"200": {
+"description": "File has been deleted",
+"schema": {
+"properties": {
+"code": {
+"example": 200,
+"type": "integer"
+},
+"msg": {
+"example": "The file is successfully deleted",
+"type": "string"
+}
+},
+"type": "object"
+}
+},
+"401": {
+"description": "File don't belong to logged in user",
+"schema": {
+"properties": {
+"code": {
+"example": 401,
+"type": "integer"
+},
+"msg": {
+"example": "Cant delete the file",
+"type": "string"
+}
+},
+"type": "object"
+}
+},
+"404": {
+"description": "File not found",
+"schema": {
+"properties": {
+"code": {
+"example": 404,
+"type": "integer"
+},
+"msg": {
+"example": "File not found",
+"type": "string"
+}
+},
+"type": "object"
+}
+}
+},
+"tags": [
+"Task"
+],
+"security": [
+{
+"Bearer": []
+}
+]
+}
+},
+"/api/v1/task/offer/add": {
+"post": {
+"parameters": [
+{
+"name": "form",
+"in": "body",
+"description": "Request Body Params",
+"schema": {
+"$ref": "#/definitions/AddOfferForm"
+}
+}
+],
+"responses": {
+"201": {
+"description": "Offer successfully created",
+"schema": {
+"properties": {
+"code": {
+"example": 201,
+"type": "integer"
+},
+"msg": {
+"example": "Offer has been created",
+"type": "string"
+},
+"data": {
+"$ref": "#/definitions/Offer"
+}
+},
+"type": "object"
+}
+},
+"400": {
+"description": "Cant add an offer invalid request",
+"schema": {
+"properties": {
+"code": {
+"example": 400,
+"type": "integer"
+},
+"msg": {
+"example": "Invalid request",
+"type": "string"
+}
+},
+"type": "object"
+}
+},
+"401": {
+"description": "You cant add an offer for this task",
+"schema": {
+"properties": {
+"code": {
+"example": 401,
+"type": "integer"
+},
+"msg": {
+"example": "You cant add offer on this task",
+"type": "string"
+}
+},
+"type": "object"
+}
+},
+"404": {
+"description": "Task not found",
+"schema": {
+"properties": {
+"code": {
+"example": 404,
+"type": "integer"
+},
+"msg": {
+"example": "Task not found",
+"type": "string"
+}
+},
+"type": "object"
+}
+}
+},
+"tags": [
+"Task Offer"
+],
+"security": [
+{
+"Bearer": []
+}
+]
+}
+},
+"/api/v1/task/offer/accept": {
+"patch": {
+"parameters": [
+{
+"name": "form",
+"in": "body",
+"description": "Request Body Params",
+"schema": {
+"properties": {
+"offer": {
+"description": "The id of the offer",
+"example": "4F8759AZ20",
+"type": "string"
+}
+},
+"type": "object"
+}
+}
+],
+"responses": {
+"200": {
+"description": "Offer successfully assigned",
+"schema": {
+"properties": {
+"code": {
+"example": 200,
+"type": "integer"
+},
+"msg": {
+"example": "Offer successfully assigned",
+"type": "string"
+}
+},
+"type": "object"
+}
+},
+"400": {
+"description": "Task assigned or offer cancelled of task date ended",
+"schema": {
+"properties": {
+"code": {
+"example": 400,
+"type": "integer"
+},
+"msg": {
+"example": "Invalid request",
+"type": "string"
+}
+},
+"type": "object"
+}
+},
+"401": {
+"description": "You cant accept offer on this task",
+"schema": {
+"properties": {
+"code": {
+"example": 401,
+"type": "integer"
+},
+"msg": {
+"example": "You cant accept offer on this task",
+"type": "string"
+}
+},
+"type": "object"
+}
+},
+"404": {
+"description": "Offer not found",
+"schema": {
+"properties": {
+"code": {
+"example": 404,
+"type": "integer"
+},
+"msg": {
+"example": "Offer not found",
+"type": "string"
+}
+},
+"type": "object"
+}
+}
+},
+"tags": [
+"Task Offer"
+],
+"security": [
+{
+"Bearer": []
+}
+]
+}
+},
+"/api/v1/task/offer/reply": {
+"post": {
+"parameters": [
+{
+"name": "form",
+"in": "body",
+"description": "Request Body Params",
+"schema": {
+"$ref": "#/definitions/OfferReplyForm"
+}
+}
+],
+"responses": {
+"201": {
+"description": "Offer reply successfully created",
+"schema": {
+"properties": {
+"code": {
+"example": 201,
+"type": "integer"
+},
+"msg": {
+"example": "Reply was added",
+"type": "string"
+},
+"data": {
+"$ref": "#/definitions/OfferReply"
+}
+},
+"type": "object"
+}
+},
+"400": {
+"description": "Invalid request",
+"schema": {
+"properties": {
+"code": {
+"example": 400,
+"type": "integer"
+},
+"msg": {
+"example": "Invalid request",
+"type": "string"
+}
+},
+"type": "object"
+}
+},
+"404": {
+"description": "Offer not found",
+"schema": {
+"properties": {
+"code": {
+"example": 404,
+"type": "integer"
+},
+"msg": {
+"example": "Offer not found",
+"type": "string"
+}
+},
+"type": "object"
+}
+}
+},
+"tags": [
+"Task Offer"
+],
+"security": [
+{
+"Bearer": []
+}
+]
+}
+},
+"/api/v1/task/question/add": {
+"post": {
+"parameters": [
+{
+"name": "form",
+"in": "body",
+"description": "Request Body Params",
+"schema": {
+"$ref": "#/definitions/QuestionForm"
+}
+}
+],
+"responses": {
+"201": {
+"description": "Quastion successfully created",
+"schema": {
+"properties": {
+"code": {
+"example": 201,
+"type": "integer"
+},
+"msg": {
+"example": "Question has been created",
+"type": "string"
+},
+"data": {
+"$ref": "#/definitions/TaskQuestion"
+}
+},
+"type": "object"
+}
+},
+"400": {
+"description": "Cant add the question invalid request",
+"schema": {
+"properties": {
+"code": {
+"example": 400,
+"type": "integer"
+},
+"msg": {
+"example": "Invalid request",
+"type": "string"
+}
+},
+"type": "object"
+}
+},
+"404": {
+"description": "Task not found",
+"schema": {
+"properties": {
+"code": {
+"example": 404,
+"type": "integer"
+},
+"msg": {
+"example": "Task not found",
+"type": "string"
+}
+},
+"type": "object"
+}
+}
+},
+"tags": [
+"Task Questions"
+],
+"security": [
+{
+"Bearer": []
+}
+]
+}
+},
+"/api/v1/task/question/reply": {
+"post": {
+"parameters": [
+{
+"name": "form",
+"in": "body",
+"description": "Request Body Params",
+"schema": {
+"$ref": "#/definitions/QuestionReplyForm"
+}
+}
+],
+"responses": {
+"201": {
+"description": "Reply successfully created",
+"schema": {
+"properties": {
+"code": {
+"example": 201,
+"type": "integer"
+},
+"msg": {
+"example": "Reply has been created",
+"type": "string"
+},
+"data": {
+"$ref": "#/definitions/TaskQuestion"
+}
+},
+"type": "object"
+}
+},
+"400": {
+"description": "Cant add the question reply invalid request",
+"schema": {
+"properties": {
+"code": {
+"example": 400,
+"type": "integer"
+},
+"msg": {
+"example": "Invalid request",
+"type": "string"
+}
+},
+"type": "object"
+}
+},
+"404": {
+"description": "Question not found",
+"schema": {
+"properties": {
+"code": {
+"example": 404,
+"type": "integer"
+},
+"msg": {
+"example": "Task not found",
+"type": "string"
+}
+},
+"type": "object"
+}
+}
+},
+"tags": [
+"Task Questions"
+],
+"security": [
+{
+"Bearer": []
+}
+]
+}
+},
+"/api/v1/task/question/delete": {
+"delete": {
+"parameters": [
+{
+"name": "form",
+"in": "body",
+"description": "Request Body Params",
+"schema": {
+"required": [
+"question"
+],
+"properties": {
+"question": {
+"description": "The question id",
+"example": "1458F846Z",
+"type": "string"
+}
+},
+"type": "object"
+}
+}
+],
+"responses": {
+"200": {
+"description": "Delete logged in user task question",
+"schema": {
+"properties": {
+"code": {
+"example": 200,
+"type": "integer"
+},
+"msg": {
+"example": "Question has been deleted",
+"type": "string"
+}
+},
+"type": "object"
+}
+},
+"401": {
+"description": "Question don't belong to current user",
+"schema": {
+"properties": {
+"code": {
+"example": 401,
+"type": "integer"
+},
+"msg": {
+"example": "Cant delete this question",
+"type": "string"
+}
+},
+"type": "object"
+}
+},
+"404": {
+"description": "Question not found",
+"schema": {
+"properties": {
+"code": {
+"example": 404,
+"type": "integer"
+},
+"msg": {
+"example": "Question not found",
+"type": "string"
+}
+},
+"type": "object"
+}
+}
+},
+"tags": [
+"Task Questions"
+],
+"security": [
+{
+"Bearer": []
+}
+]
+}
+},
+"/api/v1/user/profile/complete": {
+"post": {
+"responses": {
+"default": {
+"description": ""
+}
+}
+}
+},
+"/api/v1/user/skills/update": {
+"post": {
+"responses": {
+"default": {
+"description": ""
+}
+}
+}
+},
+"/api/v1/user/task_alert": {
+"post": {
+"responses": {
+"default": {
+"description": ""
+}
+}
+}
+},
+"/api/v1/user/review/add": {
+"post": {
+"responses": {
+"default": {
+"description": ""
+}
+}
+}
+},
+"/api/v1/user/portfolio/add": {
+"post": {
+"responses": {
+"default": {
+"description": ""
+}
+}
+}
+},
+"/api/v1/user/balance": {
+"post": {
+"summary": "TODO : IMPORTANT this ws must be removed in PROD",
+"responses": {
+"default": {
+"description": ""
+}
+}
+}
+},
+"/api/v1/user/set_fcm_token": {
+"post": {
+"responses": {
+"default": {
+"description": ""
+}
+}
+}
+},
+"/api/v1/user/skills": {
+"get": {
+"responses": {
+"default": {
+"description": ""
+}
+}
+}
+},
+"/api/v1/user/task_alert/get": {
+"post": {
+"responses": {
+"default": {
+"description": ""
+}
+}
+}
+},
+"/api/v1/user/reviews": {
+"post": {
+"responses": {
+"default": {
+"description": ""
+}
+}
+}
+},
+"/api/v1/user/portfolio/delete": {
+"post": {
+"responses": {
+"default": {
+"description": ""
+}
+}
+}
+},
+"/api/v1/user/wallet": {
+"get": {
+"responses": {
+"default": {
+"description": ""
+}
+}
+}
+},
+"/api/v1/report/add": {
+"get": {
+"responses": {
+"default": {
+"description": ""
+}
+}
+}
+},
+"/api/v1/user/discussions/message": {
+"post": {
+"responses": {
+"default": {
+"description": ""
+}
+}
+}
+},
+"/api/v1/user/discussions/showed": {
+"post": {
+"responses": {
+"default": {
+"description": ""
+}
+}
+}
+},
+"/api/v1/user/discussions": {
+"get": {
+"responses": {
+"default": {
+"description": ""
+}
+}
+}
+},
+"/api/v1/user/discussions/detail": {
+"post": {
+"responses": {
+"default": {
+"description": ""
+}
+}
+}
+}
+},
+"definitions": {
+"file": {
+"properties": {
+"path": {
+"type": "string"
+},
+"name": {
+"type": "string"
+},
+"extension": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"min_user": {
+"description": "Response for some queries",
+"properties": {
+"id": {
+"type": "string"
+},
+"first_name": {
+"type": "string"
+},
+"last_name": {
+"type": "string"
+},
+"picture": {
+"$ref": "#/definitions/file"
+}
+},
+"type": "object"
+},
+"User": {
+"properties": {
+"id": {
+"type": "string"
+},
+"first_name": {
+"type": "string"
+},
+"last_name": {
+"type": "string"
+},
+"tag_line": {
+"type": "string"
+},
+"phone": {
+"type": "string"
+},
+"birth_date": {
+"type": "string",
+"format": "date-time"
+},
+"skills": {
+"$ref": "#/definitions/Skills"
+},
+"cover_picture": {
+"$ref": "#/definitions/File"
+},
+"user_type": {
+"type": "integer"
+},
+"portfolio": {
+"items": {
+"$ref": "#/definitions/File"
+},
+"type": "array"
+}
+},
+"type": "object"
+},
+"LoginForm": {
+"required": [
+"email",
+"password"
+],
+"properties": {
+"email": {
+"description": "User email",
+"example": "login@email.com",
+"required": true,
+"type": "string"
+},
+"password": {
+"description": "User password",
+"example": "thisisapassword",
+"required": true,
+"type": "string",
+"format": "password"
+}
+},
+"type": "object"
+},
+"RegisterForm": {
+"required": [
+"email",
+"password"
+],
+"properties": {
+"email": {
+"description": "User email",
+"example": "register@email.com",
+"required": true,
+"type": "string"
+},
+"password": {
+"description": "User password",
+"example": "thisisapassword",
+"required": true,
+"type": "string",
+"format": "password"
+}
+},
+"type": "object"
+},
+"Notification": {
+"properties": {
+"id": {
+"type": "string"
+},
+"from_user": {
+"$ref": "#/definitions/User3"
+},
+"read_on": {
+"type": "boolean"
+},
+"title": {
+"type": "string"
+},
+"body": {
+"type": "string"
+},
+"type": {
+"type": "string"
+},
+"shown_on": {
+"type": "boolean"
+},
+"extra": {
+"example": "{task:'4F8578E99'}",
+"additionalProperties": true,
+"type": "object"
+},
+"read_date": {
+"example": "13-07-2019 10:00",
+"type": "string",
+"format": "date-time"
+}
+},
+"type": "object"
+},
+"NotificationConfig": {
+"properties": {
+"sms": {
+"type": "boolean"
+},
+"push": {
+"type": "boolean"
+},
+"email": {
+"type": "boolean"
+},
+"action": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"NotificationSettingForm": {
+"required": [
+"email",
+"push",
+"sms",
+"action"
+],
+"properties": {
+"email": {
+"description": "The task id",
+"example": 0,
+"type": "boolean"
+},
+"push": {
+"description": "The task id",
+"example": 1,
+"type": "boolean"
+},
+"sms": {
+"description": "The task id",
+"example": 0,
+"type": "boolean"
+},
+"action": {
+"description": "The task id",
+"example": "TSK_UPDT",
+"required": true,
+"type": "string",
+"enum": [
+"TRANS",
+"TSK_UPDT",
+"TSK_REM",
+"M_ALERT",
+"TSK_RECOM",
+"HELP_INFO",
+"UPDT_NEWS"
+]
+}
+},
+"type": "object"
+},
+"User2": {
+"properties": {
+"id": {
+"type": "string"
+},
+"email": {
+"description": "The user email",
+"type": "string"
+},
+"first_name": {
+"type": "string"
+},
+"last_name": {
+"type": "string"
+},
+"tag_line": {
+"type": "string"
+},
+"phone": {
+"type": "string"
+},
+"suburb": {
+"type": "string"
+},
+"about": {
+"type": "string"
+},
+"birth_date": {
+"type": "string",
+"format": "date-time"
+},
+"skills": {
+"$ref": "#/definitions/Skills2"
+},
+"reviews": {
+"items": {
+"$ref": "#/definitions/UserReview"
+},
+"type": "array"
+},
+"picture": {
+"$ref": "#/definitions/File2"
+},
+"cover_picture": {
+"$ref": "#/definitions/File2"
+},
+"portfolio": {
+"items": {
+"$ref": "#/definitions/File2"
+},
+"type": "array"
+}
+},
+"type": "object"
+},
+"ProfileForm": {
+"required": [
+"firstName",
+"lastName",
+"suburb",
+"email",
+"tagLine",
+"about",
+"birthDate",
+"phone"
+],
+"properties": {
+"firstName": {
+"description": "User first name",
+"type": "string"
+},
+"lastName": {
+"description": "User last name",
+"type": "string"
+},
+"suburb": {
+"description": "User suburb",
+"type": "string"
+},
+"email": {
+"description": "User email",
+"example": "maatloob@email.com",
+"type": "string"
+},
+"tagLine": {
+"description": "User tagLine",
+"type": "string"
+},
+"about": {
+"description": "User about me",
+"type": "string"
+},
+"birthDate": {
+"description": "User birth date",
+"type": "string",
+"format": "date"
+},
+"phone": {
+"description": "User phone number",
+"type": "string",
+"format": "date"
+},
+"picture": {
+"description": "User portfolio",
+"type": "file"
+},
+"coverPicture": {
+"description": "User cover picture",
+"type": "file"
+}
+},
+"type": "object"
+},
+"UserWallet": {
+"properties": {
+"id": {
+"type": "string"
+},
+"balance": {
+"type": "number",
+"format": "float"
+},
+"active": {
+"type": "boolean"
+}
+},
+"type": "object"
+},
+"TaskCategory": {
+"properties": {
+"id": {
+"type": "integer"
+},
+"name": {
+"type": "string"
+},
+"arabic_name": {
+"type": "string"
+},
+"icon": {
+"type": "string"
+},
+"description": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"Task": {
+"required": [
+"title",
+"description"
+],
+"properties": {
+"id": {
+"type": "string"
+},
+"title": {
+"type": "string"
+},
+"description": {
+"type": "string"
+},
+"is_online_work": {
+"type": "boolean"
+},
+"place": {
+"type": "string"
+},
+"date": {
+"type": "string",
+"format": "date-time"
+},
+"longitude": {
+"type": "number",
+"format": "float"
+},
+"latitude": {
+"type": "number",
+"format": "float"
+},
+"time": {
+"type": "string"
+},
+"price": {
+"type": "number",
+"format": "float"
+},
+"pricing_type": {
+"type": "integer"
+},
+"payment_type": {
+"type": "integer"
+},
+"hours_count": {
+"type": "integer"
+},
+"tasker_count": {
+"type": "integer"
+},
+"created_by": {
+"$ref": "#/definitions/User4"
+},
+"offers": {
+"items": {
+"$ref": "#/definitions/Offer2"
+},
+"type": "array"
+},
+"files": {
+"items": {
+"$ref": "#/definitions/File3"
+},
+"type": "array"
+}
+},
+"type": "object"
+},
+"Task2": {
+"type": "object"
+},
+"AddTaskForm": {
+"required": [
+"title",
+"description",
+"category",
+"place",
+"latitude",
+"longitude",
+"isOnlineWork"
+],
+"properties": {
+"title": {
+"description": "task title",
+"example": "Create a website",
+"required": true,
+"type": "string"
+},
+"description": {
+"description": "a short description for this task",
+"example": "i need a web developer to create for me an amazing website",
+"required": true,
+"type": "string"
+},
+"category": {
+"description": "Category id",
+"example": 1,
+"required": true,
+"type": "number"
+},
+"place": {
+"description": "Address where job should be done",
+"example": "this is a fake place",
+"type": "string"
+},
+"latitude": {
+"description": "Latitude of the place",
+"example": "36.8650939",
+"type": "string"
+},
+"longitude": {
+"description": "Longitude of the place",
+"example": "10.1458445",
+"type": "string"
+},
+"isOnlineWork": {
+"description": "Can the job be done remotely 1 remotely 0 in place",
+"example": 0,
+"required": true,
+"type": "boolean"
+}
+},
+"type": "object"
+},
+"UpdateTaskForm": {
+"required": [
+"title",
+"description",
+"place",
+"latitude",
+"longitude",
+"isOnlineWork",
+"time",
+"price",
+"paymentType",
+"pricingType"
+],
+"properties": {
+"title": {
+"description": "task title",
+"example": "Create a website",
+"required": false,
+"type": "string"
+},
+"description": {
+"description": "a short description for this task",
+"example": "i need a web developer to create for me an amazing website",
+"type": "string"
+},
+"place": {
+"description": "Address where job should be done",
+"example": "this is a fake place",
+"type": "string"
+},
+"latitude": {
+"description": "Latitude of the place",
+"example": "36.8650939",
+"type": "string"
+},
+"longitude": {
+"description": "Longitude of the place",
+"example": "10.1458445",
+"type": "string"
+},
+"isOnlineWork": {
+"description": "Can the job be done remotely 1 remotely 0 in place",
+"example": 0,
+"type": "number",
+"enum": [
+0,
+1
+]
+},
+"time": {
+"description": "The appropriate time to accomplish the task",
+"example": "17-7-2019",
+"required": true,
+"type": "string"
+},
+"price": {
+"description": "What is your budget",
+"example": 250,
+"required": true,
+"type": "float"
+},
+"paymentType": {
+"description": "Payment type can be cash 1 or from card 2",
+"example": 1,
+"required": true,
+"type": "int"
+},
+"pricingType": {
+"description": "Payment hourly or for all the job",
+"example": 1,
+"required": true,
+"type": "int"
+},
+"mustHave": {
+"description": "Criteria that should the tasker have",
+"example": [
+"a driving licence",
+"a car with air conditioner",
+"a suit"
+],
+"required": false,
+"type": "array"
+},
+"files": {
+"description": "Image or video or text linked with the task",
+"example": [
+"file1",
+"file2"
+],
+"required": false,
+"type": "array"
+},
+"taskerCount": {
+"description": "Tasker needed to do the job",
+"example": 1,
+"required": false,
+"type": "number"
+}
+},
+"type": "object"
+},
+"Offer": {
+"required": [
+"text"
+],
+"properties": {
+"id": {
+"type": "string"
+},
+"created_by": {
+"$ref": "#/definitions/User5"
+},
+"status": {
+"type": "integer"
+},
+"text": {
+"type": "string"
+},
+"files": {
+"items": {
+"$ref": "#/definitions/File4"
+},
+"type": "array"
+},
+"date": {
+"type": "string",
+"format": "date-time"
+},
+"time": {
+"type": "string"
+},
+"price": {
+"type": "number",
+"format": "float"
+}
+},
+"type": "object"
+},
+"AddOfferForm": {
+"required": [
+"task",
+"text",
+"price"
+],
+"properties": {
+"task": {
+"description": "The task id",
+"example": "47F85ZAX10",
+"required": true,
+"type": "string",
+"format": "AppBundle\\Entity\\Task id"
+},
+"text": {
+"description": "Description for you offer",
+"example": "I can do it very quickly and i guarantee that",
+"required": true,
+"type": "string"
+},
+"price": {
+"description": "The price you gonna do the task for",
+"example": 250,
+"required": true,
+"type": "number"
+},
+"files": {
+"description": "file can be image video or text file",
+"items": {
+"type": "string"
+},
+"type": "array",
+"format": "[AppBundle\\Entity\\File id]"
+}
+},
+"type": "object"
+},
+"OfferReply": {
+"required": [
+"text"
+],
+"properties": {
+"id": {
+"type": "string"
+},
+"created_by": {
+"$ref": "#/definitions/User6"
+},
+"text": {
+"type": "string"
+},
+"files": {
+"items": {
+"$ref": "#/definitions/File5"
+},
+"type": "array"
+}
+},
+"type": "object"
+},
+"OfferReplyForm": {
+"required": [
+"offer",
+"text"
+],
+"properties": {
+"offer": {
+"description": "The offer id",
+"example": "47F85ZAX10",
+"required": true,
+"type": "string",
+"format": "AppBundle\\Entity\\Offer id"
+},
+"text": {
+"description": "Description for you offer",
+"example": "I can do it very quickly and i guarantee that",
+"required": true,
+"type": "string"
+},
+"files": {
+"description": "file can be image video or text file",
+"items": {
+"type": "string"
+},
+"type": "array",
+"format": "[AppBundle\\Entity\\File id]"
+}
+},
+"type": "object"
+},
+"TaskQuestion": {
+"required": [
+"text"
+],
+"properties": {
+"id": {
+"type": "string"
+},
+"created_by": {
+"$ref": "#/definitions/User7"
+},
+"text": {
+"type": "string"
+},
+"files": {
+"items": {
+"$ref": "#/definitions/File6"
+},
+"type": "array"
+}
+},
+"type": "object"
+},
+"QuestionForm": {
+"required": [
+"text",
+"task"
+],
+"properties": {
+"text": {
+"description": "question text",
+"example": "Can you provide mode details",
+"required": true,
+"type": "string"
+},
+"task": {
+"description": "Task id",
+"example": "4f8AZ110",
+"required": true,
+"type": "string"
+},
+"files": {
+"description": "file can be image video or text file",
+"items": {
+"type": "string"
+},
+"type": "array",
+"format": "[AppBundle\\Entity\\File id]"
+}
+},
+"type": "object"
+},
+"QuestionReplyForm": {
+"required": [
+"text",
+"replyFor"
+],
+"properties": {
+"text": {
+"description": "question text",
+"example": "Can you provide mode details",
+"required": true,
+"type": "string"
+},
+"files": {
+"description": "file can be image video or text file",
+"items": {
+"type": "string"
+},
+"type": "array",
+"format": "[AppBundle\\Entity\\File id]"
+},
+"replyFor": {
+"description": "question id",
+"example": "48F5Z990",
+"required": true,
+"type": "string",
+"format": "AppBundle\\Entity\\TaskQuestion id"
+}
+},
+"type": "object"
+},
+"Skills": {
+"type": "object"
+},
+"File": {
+"type": "object"
+},
+"User3": {
+"properties": {
+"id": {
+"type": "string"
+},
+"first_name": {
+"type": "string"
+},
+"last_name": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"Skills2": {
+"properties": {
+"good_at": {
+"type": "string"
+},
+"get_around": {
+"type": "string"
+},
+"languages": {
+"type": "string"
+},
+"qualifications": {
+"type": "string"
+},
+"experience": {
+"type": "string"
+},
+"education": {
+"type": "string"
+},
+"work": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"UserReview": {
+"properties": {
+"id": {
+"type": "string"
+},
+"user": {
+"$ref": "#/definitions/min_user"
+},
+"task": {
+"$ref": "#/definitions/Task3"
+},
+"as_a": {
+"type": "string"
+},
+"description": {
+"type": "string"
+},
+"note": {
+"type": "number",
+"format": "float"
+}
+},
+"type": "object"
+},
+"File2": {
+"properties": {
+"id": {
+"type": "string"
+},
+"path": {
+"type": "string"
+},
+"name": {
+"type": "string"
+},
+"extension": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"User4": {
+"properties": {
+"id": {
+"type": "string"
+},
+"first_name": {
+"type": "string"
+},
+"last_name": {
+"type": "string"
+},
+"picture": {
+"$ref": "#/definitions/File3"
+}
+},
+"type": "object"
+},
+"Offer2": {
+"properties": {
+"id": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"File3": {
+"properties": {
+"id": {
+"type": "string"
+},
+"path": {
+"type": "string"
+},
+"name": {
+"type": "string"
+},
+"extension": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"User5": {
+"properties": {
+"id": {
+"type": "string"
+},
+"first_name": {
+"type": "string"
+},
+"last_name": {
+"type": "string"
+},
+"picture": {
+"$ref": "#/definitions/File4"
+}
+},
+"type": "object"
+},
+"File4": {
+"properties": {
+"id": {
+"type": "string"
+},
+"path": {
+"type": "string"
+},
+"name": {
+"type": "string"
+},
+"extension": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"User6": {
+"properties": {
+"id": {
+"type": "string"
+},
+"first_name": {
+"type": "string"
+},
+"last_name": {
+"type": "string"
+},
+"picture": {
+"$ref": "#/definitions/File5"
+}
+},
+"type": "object"
+},
+"File5": {
+"properties": {
+"id": {
+"type": "string"
+},
+"path": {
+"type": "string"
+},
+"name": {
+"type": "string"
+},
+"extension": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"User7": {
+"properties": {
+"id": {
+"type": "string"
+},
+"first_name": {
+"type": "string"
+},
+"last_name": {
+"type": "string"
+},
+"picture": {
+"$ref": "#/definitions/File6"
+}
+},
+"type": "object"
+},
+"File6": {
+"properties": {
+"id": {
+"type": "string"
+},
+"path": {
+"type": "string"
+},
+"name": {
+"type": "string"
+},
+"extension": {
+"type": "string"
+}
+},
+"type": "object"
+},
+"Task3": {
+"required": [
+"title"
+],
+"properties": {
+"id": {
+"type": "string"
+},
+"title": {
+"type": "string"
+}
+},
+"type": "object"
+}
+},
+"securityDefinitions": {
+"Bearer": {
+"name": "Authorization",
+"type": "apiKey",
+"in": "header",
+"description": "Value: Bearer {jwt}"
+}
+},
+"security": [
+{
+"Bearer": []
+}
+],
+"basePath": "/app_dev.php"
+}
